@@ -1,0 +1,13 @@
+{
+  "name": "login-feature",
+  "version": "0.1.0",
+  "description": "M6.1 dry-run target: simple login feature (skeleton only, personas implement)",
+  "private": true,
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
