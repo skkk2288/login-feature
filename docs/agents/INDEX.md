@@ -29,3 +29,5 @@
 | 2026-08-07 | 后端 | src/store/users.js | UserRepository（内存Map双索引）+ 种子用户 |
 | 2026-08-07 | 后端 | src/middleware/auth.js | 认证中间件（cookie->session->req.user） |
 | 2026-08-07 | 后端 | package.json | 新增依赖 bcryptjs、cookie-parser |
+| 2026-08-07 | QA | tests/auth_integration.test.js | 登录功能集成测试（36 cases） |
+| 2026-08-07 | QA | docs/agents/QA/test-report.md | 登录功能测试报告 |
