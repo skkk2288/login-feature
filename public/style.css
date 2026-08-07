@@ -1,0 +1,270 @@
+/* ===== Reset / Base ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: #f5f6f8;
+  color: #1a1a1a;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ===== Layout ===== */
+.view {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1.5rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 380px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 2rem 1.75rem;
+}
+
+.card h1 {
+  margin: 0 0 1.25rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ===== Error message (表单上方) ===== */
+.error-message {
+  margin-bottom: 1rem;
+  padding: 0.625rem 0.875rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 6px;
+  font-size: 0.875rem;
+}
+
+/* ===== Form fields ===== */
+.form-field {
+  margin-bottom: 1rem;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 0.375rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.form-field input[type="email"],
+.form-field input[type="password"],
+.form-field input[type="text"] {
+  width: 100%;
+  padding: 0.5625rem 0.75rem;
+  font-size: 0.9375rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: #fff;
+  color: #1a1a1a;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-field input[type="email"]:hover,
+.form-field input[type="password"]:hover,
+.form-field input[type="text"]:hover {
+  border-color: #9ca3af;
+}
+
+/* 可访问性：清晰的 focus 样式 */
+.form-field input[type="email"]:focus,
+.form-field input[type="password"]:focus,
+.form-field input[type="text"]:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.form-field input[aria-invalid="true"] {
+  border-color: #ef4444;
+}
+
+.form-field input[aria-invalid="true"]:focus {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+/* 字段级错误 */
+.field-error {
+  display: block;
+  margin-top: 0.3125rem;
+  font-size: 0.8125rem;
+  color: #ef4444;
+}
+
+/* 记住我：行内排列 */
+.form-field-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.form-field-inline input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  cursor: pointer;
+  accent-color: #2563eb;
+}
+
+.form-field-inline label {
+  margin-bottom: 0;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ===== Password toggle ===== */
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 3.75rem;
+}
+
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 0.5rem;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-size: 0.8125rem;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.toggle-password:hover {
+  color: #374151;
+  background: #f3f4f6;
+}
+
+.toggle-password:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* ===== Buttons ===== */
+.btn-primary,
+.btn-secondary {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: #2563eb;
+  color: #fff;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.btn-primary:active:not(:disabled) {
+  background: #1e40af;
+}
+
+.btn-primary:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 可访问性：按钮 focus */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+/* ===== Loading spinner ===== */
+.btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== Profile view ===== */
+#profile-view p {
+  font-size: 0.9375rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+#profile-email {
+  font-weight: 600;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 420px) {
+  .card {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+/* ===== 可访问性：尊重用户的减少动画偏好 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .btn-spinner {
+    animation: none;
+  }
+  * {
+    transition: none !important;
+  }
+}

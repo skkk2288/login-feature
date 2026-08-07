@@ -4,8 +4,74 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>登录</title>
+  <link rel="stylesheet" href="/public/style.css" />
 </head>
 <body>
-  <!-- TODO: persona 实现 -->
+  <!-- 登录视图 -->
+  <main id="login-view" class="view" aria-labelledby="login-heading">
+    <div class="card">
+      <h1 id="login-heading">登录</h1>
+
+      <!-- 错误提示（表单上方）-->
+      <div id="login-error" class="error-message" role="alert" aria-live="assertive" hidden></div>
+
+      <form id="login-form" novalidate>
+        <div class="form-field">
+          <label for="email">邮箱</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            autocomplete="username"
+            required
+            aria-required="true"
+            aria-describedby="email-error"
+            placeholder="you@example.com"
+          />
+          <span id="email-error" class="field-error" role="alert" hidden></span>
+        </div>
+
+        <div class="form-field">
+          <label for="password">密码</label>
+          <div class="password-wrap">
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+              aria-describedby="password-error"
+            />
+            <button type="button" id="toggle-password" class="toggle-password" aria-label="显示密码" aria-pressed="false">
+              <span class="eye-text">显示</span>
+            </button>
+          </div>
+          <span id="password-error" class="field-error" role="alert" hidden></span>
+        </div>
+
+        <div class="form-field form-field-inline">
+          <input type="checkbox" id="rememberMe" name="rememberMe" />
+          <label for="rememberMe">记住我</label>
+        </div>
+
+        <button type="submit" id="login-button" class="btn-primary">
+          <span class="btn-text">登录</span>
+          <span class="btn-spinner" hidden></span>
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- 已登录视图 -->
+  <main id="profile-view" class="view" aria-labelledby="profile-heading" hidden>
+    <div class="card">
+      <h1 id="profile-heading">已登录</h1>
+      <p>当前用户：<span id="profile-email"></span></p>
+      <button type="button" id="logout-button" class="btn-secondary">退出登录</button>
+    </div>
+  </main>
+
+  <script src="/public/login.js"></script>
 </body>
 </html>
