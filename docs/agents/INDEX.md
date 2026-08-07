@@ -26,3 +26,6 @@
 | 2026-08-07 | 后端 | src/routes/login.js | POST /api/login 路由 |
 | 2026-08-07 | 后端 | src/routes/me.js | GET /api/me 路由 |
 | 2026-08-07 | 后端 | src/routes/logout.js | POST /api/logout 路由 |
+| 2026-08-07 | QA | tests/auth_integration.test.js | 登录功能后端集成测试（32 cases） |
+| 2026-08-07 | QA | src/app.test.js | 登录功能前端单元测试（15 cases） |
+| 2026-08-07 | QA | docs/agents/QA/test-report.md | 登录功能测试报告 |

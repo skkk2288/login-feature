@@ -5,11 +5,17 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "COOKIE_SECURE=false node --test tests/auth_integration.test.js src/app.test.js",
+    "test:backend": "COOKIE_SECURE=false node --test tests/auth_integration.test.js",
+    "test:frontend": "node --test src/app.test.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "jsdom": "^29.1.1"
   }
 }
