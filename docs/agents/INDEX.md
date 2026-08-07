@@ -9,3 +9,6 @@
 | 2026-08-07 | 前端 | index.html | 登录表单组件 + 认证流程（登录/登出/登录态切换） |
 | 2026-08-07 | 后端 | server.js | POST /api/login + GET /api/me + POST /api/logout + UserRepository + SessionStore + RateLimitStore |
 | 2026-08-07 | 后端 | package.json | 添加 bcrypt 依赖 |
+| 2026-08-07 | QA | tests/auth_integration.test.js | 登录功能后端集成测试（33 用例） |
+| 2026-08-07 | QA | src/app.test.js | 登录功能前端单元测试（27 用例） |
+| 2026-08-07 | QA | docs/agents/QA/test-report.md | 登录功能测试报告 |
