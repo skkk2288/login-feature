@@ -4,8 +4,476 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>登录</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      padding: 32px;
+    }
+
+    .card h1 {
+      font-size: 24px;
+      color: #333;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .error-banner {
+      background-color: #fee;
+      border: 1px solid #fcc;
+      color: #c33;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 14px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .error-banner.visible {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+
+    .form-group input[type="email"],
+    .form-group input[type="password"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 14px;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input[type="email"]:focus,
+    .form-group input[type="password"]:focus {
+      outline: none;
+      border-color: #4a90d9;
+    }
+
+    .form-group input.field-error {
+      border-color: #c33;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .checkbox-group label {
+      font-size: 14px;
+      color: #555;
+      cursor: pointer;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-primary {
+      background-color: #4a90d9;
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background-color: #357abd;
+    }
+
+    .btn-primary:disabled {
+      background-color: #a0c4eb;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background-color: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ccc;
+    }
+
+    .logged-in-view {
+      text-align: center;
+    }
+
+    .logged-in-view .user-email {
+      font-size: 16px;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .logged-in-view .user-email span {
+      font-weight: 600;
+    }
+
+    .demo-hint {
+      margin-top: 16px;
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+    }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 40px 0;
+      color: #999;
+    }
+
+    .loading.visible {
+      display: block;
+    }
+  </style>
 </head>
 <body>
-  <!-- TODO: persona 实现 -->
+  <div class="container">
+    <div class="card" id="app">
+      <!-- Loading state (shown while checking /api/me) -->
+      <div class="loading visible" id="loading-view">
+        加载中…
+      </div>
+
+      <!-- Login form view -->
+      <div id="login-view" style="display: none">
+        <h1>登录</h1>
+        <div class="error-banner" id="error-banner" role="alert"></div>
+        <form id="login-form" novalidate>
+          <div class="form-group">
+            <label for="email">邮箱</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              autocomplete="email"
+              placeholder="you@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">密码</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              autocomplete="current-password"
+              placeholder="输入密码"
+            />
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="rememberMe" name="rememberMe" />
+            <label for="rememberMe">记住我</label>
+          </div>
+          <button type="submit" class="btn btn-primary" id="login-btn">
+            登录
+          </button>
+        </form>
+        <p class="demo-hint">
+          Demo 用户：demo@example.com / password123
+        </p>
+      </div>
+
+      <!-- Logged-in view -->
+      <div id="logged-in-view" style="display: none">
+        <h1>已登录</h1>
+        <div class="user-email">
+          当前用户：<span id="current-email"></span>
+        </div>
+        <button type="button" class="btn btn-secondary" id="logout-btn">
+          登出
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    "use strict";
+
+    (function () {
+      // ── DOM references ──────────────────────────────────────────
+      var loadingView = document.getElementById("loading-view");
+      var loginView = document.getElementById("login-view");
+      var loggedInView = document.getElementById("logged-in-view");
+      var errorBanner = document.getElementById("error-banner");
+      var loginForm = document.getElementById("login-form");
+      var emailInput = document.getElementById("email");
+      var passwordInput = document.getElementById("password");
+      var rememberMeInput = document.getElementById("rememberMe");
+      var loginBtn = document.getElementById("login-btn");
+      var currentEmailSpan = document.getElementById("current-email");
+      var logoutBtn = document.getElementById("logout-btn");
+
+      // ── RFC 5322 practical email regex ──────────────────────────
+      var EMAIL_REGEX =
+        /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+      // ── View switching ──────────────────────────────────────────
+      function showView(view) {
+        loadingView.style.display = "none";
+        loginView.style.display = "none";
+        loggedInView.style.display = "none";
+        if (view === "login") {
+          loginView.style.display = "block";
+        } else if (view === "logged-in") {
+          loggedInView.style.display = "block";
+        } else if (view === "loading") {
+          loadingView.style.display = "block";
+        }
+      }
+
+      // ── Error banner ────────────────────────────────────────────
+      function showError(message) {
+        errorBanner.textContent = message;
+        errorBanner.classList.add("visible");
+      }
+
+      function clearError() {
+        errorBanner.textContent = "";
+        errorBanner.classList.remove("visible");
+      }
+
+      function clearFieldErrors() {
+        emailInput.classList.remove("field-error");
+        passwordInput.classList.remove("field-error");
+      }
+
+      // ── Frontend validation ─────────────────────────────────────
+      // Returns error message string if invalid, null if valid.
+      function validate(email, password) {
+        clearFieldErrors();
+
+        if (!email) {
+          emailInput.classList.add("field-error");
+          return "请输入邮箱";
+        }
+        if (!EMAIL_REGEX.test(email)) {
+          emailInput.classList.add("field-error");
+          return "邮箱格式不正确";
+        }
+        if (!password) {
+          passwordInput.classList.add("field-error");
+          return "请输入密码";
+        }
+        return null;
+      }
+
+      // ── API calls ───────────────────────────────────────────────
+      function apiGetMe() {
+        return fetch("/api/me", {
+          method: "GET",
+          headers: { Accept: "application/json" },
+          credentials: "same-origin",
+        }).then(function (res) {
+          return res.json().then(function (body) {
+            return { ok: res.ok, status: res.status, body: body };
+          });
+        });
+      }
+
+      function apiLogin(email, password, rememberMe) {
+        return fetch("/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            email: email,
+            password: password,
+            rememberMe: rememberMe,
+          }),
+        }).then(function (res) {
+          return res.json().then(function (body) {
+            return { ok: res.ok, status: res.status, body: body };
+          });
+        });
+      }
+
+      function apiLogout() {
+        return fetch("/api/logout", {
+          method: "POST",
+          headers: { Accept: "application/json" },
+          credentials: "same-origin",
+        }).then(function (res) {
+          return res.json().then(function (body) {
+            return { ok: res.ok, status: res.status, body: body };
+          });
+        });
+      }
+
+      // ── Map API error code → user-facing message ────────────────
+      function getErrorMessage(response) {
+        var body = response.body || {};
+        // Use server message if provided, otherwise map by error code
+        if (body.message) {
+          return body.message;
+        }
+        switch (body.error) {
+          case "bad_request":
+            return "请求格式错误，请检查输入";
+          case "invalid_credentials":
+            return "邮箱或密码错误";
+          case "too_many_attempts":
+            return "登录尝试过多，请 15 分钟后再试";
+          case "not_authenticated":
+            return "未登录";
+          case "internal_error":
+            return "服务器内部错误";
+          default:
+            return "请求失败，请稍后重试";
+        }
+      }
+
+      // ── Login state management ──────────────────────────────────
+      function showLoggedIn(email) {
+        clearError();
+        clearFieldErrors();
+        currentEmailSpan.textContent = email;
+        showView("logged-in");
+      }
+
+      function showLoginForm() {
+        clearError();
+        clearFieldErrors();
+        passwordInput.value = "";
+        showView("login");
+        emailInput.focus();
+      }
+
+      // ── Event handlers ──────────────────────────────────────────
+
+      // Page load: check login state via GET /api/me
+      function init() {
+        apiGetMe()
+          .then(function (response) {
+            if (response.ok && response.body && response.body.email) {
+              showLoggedIn(response.body.email);
+            } else {
+              showLoginForm();
+            }
+          })
+          .catch(function () {
+            // Network error — show login form so user can retry
+            showLoginForm();
+          });
+      }
+
+      // Login form submit
+      loginForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+        clearError();
+
+        var email = emailInput.value.trim();
+        var password = passwordInput.value;
+        var rememberMe = rememberMeInput.checked;
+
+        // Frontend validation — don't submit if invalid
+        var validationError = validate(email, password);
+        if (validationError) {
+          showError(validationError);
+          return;
+        }
+
+        // Disable button during request
+        loginBtn.disabled = true;
+        loginBtn.textContent = "登录中…";
+
+        apiLogin(email, password, rememberMe)
+          .then(function (response) {
+            if (response.ok && response.body && response.body.email) {
+              showLoggedIn(response.body.email);
+            } else {
+              showError(getErrorMessage(response));
+            }
+          })
+          .catch(function () {
+            showError("网络错误，请稍后重试");
+          })
+          .finally(function () {
+            loginBtn.disabled = false;
+            loginBtn.textContent = "登录";
+          });
+      });
+
+      // Logout button
+      logoutBtn.addEventListener("click", function () {
+        logoutBtn.disabled = true;
+        logoutBtn.textContent = "登出中…";
+
+        apiLogout()
+          .then(function () {
+            // Idempotent — always go to login form
+            showLoginForm();
+          })
+          .catch(function () {
+            // Even on network error, clear local state
+            showLoginForm();
+          })
+          .finally(function () {
+            logoutBtn.disabled = false;
+            logoutBtn.textContent = "登出";
+          });
+      });
+
+      // Clear field error styling on input
+      emailInput.addEventListener("input", function () {
+        emailInput.classList.remove("field-error");
+        clearError();
+      });
+      passwordInput.addEventListener("input", function () {
+        passwordInput.classList.remove("field-error");
+        clearError();
+      });
+
+      // ── Init ────────────────────────────────────────────────────
+      init();
+    })();
+  </script>
 </body>
 </html>
