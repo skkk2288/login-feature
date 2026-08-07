@@ -1,12 +1,12 @@
-const express = require("express");
+"use strict";
 
-const app = express();
+/**
+ * 入口文件
+ * 装配 app 并启动 HTTP 服务
+ */
+
+const app = require("./src/app");
 const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(express.static(__dirname));
-
-// TODO: persona 实现 /api/login + /api/me
 
 app.listen(PORT, () => {
   console.log(`server listening on ${PORT}`);
